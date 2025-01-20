@@ -1,3 +1,8 @@
+import config
+from extension import db
+from flask import Flask
+from flask_migrate import Migrate
+
 # Create Flask application
 app = Flask(__name__)
 
