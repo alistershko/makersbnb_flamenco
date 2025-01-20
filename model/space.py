@@ -1,1 +1,3 @@
-class UserModel(db.Model)
+from extension import db
+class UserModel(db.Model):
+
