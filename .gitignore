@@ -1,4 +1,34 @@
-__pycache__
-.vscode
-.pytest_cache
-screenshot.png
+# Ignore virtual environment
+venv/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+
+# Ignore IDE/editor files
+.idea/
+.vscode/
+
+# Ignore compiled files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables and secrets
+.env
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Ignore deployment or build artifacts
+*.egg
+*.egg-info/
+dist/
+build/
