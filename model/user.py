@@ -9,6 +9,7 @@ class UserModel(db.Model):
     username = db.Column(db.String(200), nullable = False, unique = True)
     password = db.Column(db.String(200), nullable = False)
     email = db.Column(db.String(200), nullable = False, unique = True)
+    phone_number = db.Column(db.Integer, nullablele = False, unique = True)
 
     # owner = UserModel()
     # owner.spaces(location = "kingscross")
