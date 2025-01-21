@@ -4,6 +4,10 @@ from extension import db
 from forms import space_form
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# list all existing spaces
+# show one specific space
+# request to book a specific space
+
 homepage =Blueprint("name", __name__, url_prefix= "/homepage")
 
 @homepage.route('/all', methods=['GET'])

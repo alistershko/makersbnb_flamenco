@@ -27,9 +27,9 @@ def MakeASpace():
         return None
     return render_template("make_a_new_space.html", form=form)
 
-@spaces.route('/edit_an_existing_space', methods=['GET', 'POST'])
+# @spaces.route('/edit_an_existing_space', methods=['GET', 'POST'])
 
-@spaces.route('/delete_an_existing_space', methods=['GET', 'POST'])
+# @spaces.route('/delete_an_existing_space', methods=['GET', 'POST'])
 
 @spaces.route('/list_all_spaces', methods=['GET', 'POST'])
 
