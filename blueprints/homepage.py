@@ -10,10 +10,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 homepage =Blueprint("name", __name__, url_prefix= "/homepage")
 
+# route路由，下面定义的是视图函数view function, 所以url_for('homepage.ListAllSpace')
 @homepage.route('/all', methods=['GET'])
 def ListAllSpaces():
-    pass
+    spaces = SpaceModel.query.all()
+    return render_template('all_spaces.html', spaces = spaces)
 
-@homepage.route('/the_name_of_the_space', methods=['GET'])
-def ShowOneSpace():
-    pass
+
+@homepage.route('/spaces/<int:space_id>', methods=['GET'])
+def ShowOneSpace(space_id):
+    space = SpaceModel.query.filter_by(space_id)
+    if not space:
+        flash("space not found", "danger")
+        return redirect(url_for('homepage.ListAllSpaces'))
+    return render_template('single_space.html', space = space)
