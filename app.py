@@ -2,6 +2,7 @@ import config
 from extension import db
 from flask import Flask
 from flask_migrate import Migrate
+from model import *
 
 # Create Flask application
 app = Flask(__name__)
@@ -20,13 +21,6 @@ try:
             print("PostgreSQL connection successful!")
 except Exception as e:
     print("Failed to connect to PostgreSQL:", str(e))  # Print the error message if connection fails
-
-
-
-
-
-
-
 
 
 
