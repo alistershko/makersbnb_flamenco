@@ -6,6 +6,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 homepage =Blueprint("name", __name__, url_prefix= "/homepage")
 
-@spaces.route('/list_all_spaces', methods=['GET'])
+@homepage.route('/all', methods=['GET'])
+def ListAllSpaces():
+    pass
 
-@spaces.route('/list_one_space', methods=['GET'])
+@homepage.route('/the_name_of_the_space', methods=['GET'])
+def ShowOneSpace():
+    pass
