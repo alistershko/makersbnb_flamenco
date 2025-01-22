@@ -37,6 +37,7 @@ def ApproveRequestAsOwner(request_id):
         booking_start_date = request.booking_start_date,
         booking_end_date = request.booking_end_date
     )
+    request.status = "Approved"
     db.session.add(booking)
     db.session.commit()
     flash("Request approved and booking created.", "success")
