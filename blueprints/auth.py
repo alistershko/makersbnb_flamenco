@@ -46,6 +46,8 @@ def login():
     if form.validate_on_submit():
         user = UserModel().query.filter_by(email = form.email.data)
         if user and user.password() ==  form.password.data:
+            # always store the user_id in the session so it temporaily store this information until logout
+            session['user_id'] = user.id
             flash("Account Login Successfully", "success")
             return redirect(url_for("main.dashboard"))
 
