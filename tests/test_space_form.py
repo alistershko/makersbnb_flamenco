@@ -60,3 +60,4 @@ class TestSpaceForm(unittest.TestCase):
         if not form.validate():
             print(form.errors)
         self.assertFalse(form.validate())
+
