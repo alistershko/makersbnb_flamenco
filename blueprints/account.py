@@ -3,7 +3,6 @@ from pyexpat.errors import messages
 
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 
-
 from forms.booking_request_form import BookingRequestForm
 from model import RequestModel, BookingModel
 from model.space import SpaceModel

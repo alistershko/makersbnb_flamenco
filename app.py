@@ -1,8 +1,10 @@
 import config
+from blueprints import auth, homepage, account
 from extension import db
 from flask import Flask
 from flask_migrate import Migrate
 from model import *
+from blueprints import *
 
 # Create Flask application
 app = Flask(__name__)
@@ -22,7 +24,10 @@ try:
 except Exception as e:
     print("Failed to connect to PostgreSQL:", str(e))  # Print the error message if connection fails
 
-
+# Registering blueprints
+app.register_blueprint(auth, url_prefix='/auth')  # /auth path
+app.register_blueprint(homepage, url_prefix='/homepage')  # /homepage path
+app.register_blueprint(account, url_prefix='/account')  # /account path
 
 
 
