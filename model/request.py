@@ -1,3 +1,5 @@
+from email.policy import default
+
 from sqlalchemy.engine import TupleResult
 from sqlalchemy.orm import backref
 from datetime import *
@@ -12,4 +14,7 @@ class RequestModel(db.Model):
     message = db.Column(db.Text, nullable = False)
     booking_start_date = db.Column(db.Date, nullable = False)
     booking_end_date = db.Column(db.Date, nullable = False)
+    status = db.Column(db.String(100), default = "pending")
+#     status
+
 
