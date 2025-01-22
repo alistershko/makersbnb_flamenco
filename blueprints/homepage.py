@@ -12,13 +12,14 @@ from forms import space_form
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-homepage =Blueprint("name", __name__, url_prefix= "/homepage")
+homepage =Blueprint("homepage", __name__, url_prefix= "/homepage")
 
 # Show all spaces on the homepage
 @homepage.route('/all', methods=['GET'])
 def ListAllSpaces():
     spaces = SpaceModel.query.all()
     return render_template('all_spaces.html', spaces = spaces)
+
 
 # Show one specific space
 @homepage.route('/spaces/<int:space_id>', methods=['GET'])
