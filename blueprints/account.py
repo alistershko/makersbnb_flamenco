@@ -10,7 +10,7 @@ from extension import db
 from forms import space_form
 from werkzeug.security import generate_password_hash, check_password_hash
 
-account =Blueprint("name", __name__, url_prefix= "/account")
+account =Blueprint("account", __name__, url_prefix= "/account")
 
 # View requests for spaces user owns
 @account.route('/request', methods = ['GET'])
@@ -23,7 +23,7 @@ def ViewRequestsAsOwner():
     return render_template('owner_requests.html', request = pending_requests)
 
 # Approve a request as an owner
-@account.route('/request/<int:request_id/approve>', methods = ['POST'])
+@account.route('/request/<int:request_id>/approve', methods = ['POST'])
 def ApproveRequestAsOwner(request_id):
     request = RequestModel.query.filter_by(id = request_id)
     if not request:

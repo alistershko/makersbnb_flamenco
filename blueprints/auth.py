@@ -11,7 +11,7 @@ from extension import db
 from forms import register_form, login_form
 from werkzeug.security import generate_password_hash, check_password_hash
 
-auth =Blueprint("name", __name__, url_prefix= "/auth")
+auth = Blueprint("auth", __name__, url_prefix="/auth")
 
 # Register a new user
 @auth.route('/register', methods=['GET', 'POST'])
@@ -22,6 +22,8 @@ def Register():
             flash("Email already exists", "danger")
             return render_template("register.html", form=form)
 
+
+
         user = UserModel(
             username = form.username.data,
             password = form.password.data,
@@ -31,6 +33,7 @@ def Register():
         db.session.add(user)
         db.session.commit()
         flash("Account create successfully", "success")
+
         return redirect(url_for("auth.login"))
     return render_template("register.html", form=form)
 
