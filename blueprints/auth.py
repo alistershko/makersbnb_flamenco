@@ -13,9 +13,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 auth =Blueprint("name", __name__, url_prefix= "/auth")
 
-
+# Register a new user
 @auth.route('/register', methods=['GET', 'POST'])
-# register a new user
 def Register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -23,25 +22,21 @@ def Register():
             flash("Email already exists", "danger")
             return render_template("register.html", form=form)
 
-        user = UserModel(username = form.username.data,
-                         password = form.password.data,
-                         email = form.email.data,
-                         phone_number = form.phone_number.data
-                         )
+        user = UserModel(
+            username = form.username.data,
+            password = form.password.data,
+            email = form.email.data,
+            phone_number = form.phone_number.data
+        )
         db.session.add(user)
         db.session.commit()
         flash("Account create successfully", "success")
         return redirect(url_for("auth.login"))
-
-
     return render_template("register.html", form=form)
 
-
-
-
-# login to an existing account
+# Login to an existing account
 @auth.route('/login', methods = ['GET', 'POST'])
-def login():
+def Login():
     form = LoginForm()
     if form.validate_on_submit():
         user = UserModel().query.filter_by(email = form.email.data)
@@ -52,20 +47,14 @@ def login():
             return redirect(url_for("main.dashboard"))
 
         else:
-             flash("Password Incorrect", "danger")
+            flash("Password Incorrect", "danger")
     #   redirect to login again
     return render_template("login.html", form=form)
 
-# logout from a session
+# Logout from a session
 @auth.route('/logout')
-def logout():
+def Logout():
     session.pop('user_id', None)
     flash("Logged out successfully!", "success")
     return redirect(url_for("auth.login"))
-
-
-
-
-
-
 
