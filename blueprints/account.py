@@ -15,7 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 account =Blueprint("name", __name__, url_prefix= "/account")
 
 # View requests for spaces user owns
-@account.route('/request')
+@account.route('/request', methods = ['GET'])
 def ViewRequestsAsOwner():
     owner_space_ids = [space.id for space in SpaceModel.query.filter_by(owner_id = session['user_id'])]
     pending_requests = RequestModel.query.filter(
@@ -30,7 +30,7 @@ def ApproveRequestAsOwner(request_id):
     request = RequestModel.query.filter_by(id = request_id)
     if not request:
         flash("Request not found.", "error")
-        return redirect(url_for('account.ViewRequests'))
+        return redirect(url_for('account.ViewRequestsAsOwner'))
     booking = BookingModel(
         space_id = request.space_id,
         requester_id = request.request_id,
@@ -41,7 +41,7 @@ def ApproveRequestAsOwner(request_id):
     db.session.add(booking)
     db.session.commit()
     flash("Request approved and booking created.", "success")
-    return redirect(url_for('account.ViewRequests'))
+    return redirect(url_for('account.ViewRequestsAsOwner'))
 
 # Reject a request as an owner
 @account.route('/request/<int:request_id>/reject', methods=['POST'])
@@ -49,21 +49,21 @@ def RejectRequestAsOwner(request_id):
     request = RequestModel.query.get(request_id)
     if not request:
         flash("Request not found.", "error")
-        return redirect(url_for('account.ViewRequests'))
+        return redirect(url_for('account.ViewRequestsAsOwner'))
 
     request.status = "Rejected"
     db.session.commit()
     flash("Request rejected.", "info")
-    return redirect(url_for('account.ViewRequests'))
+    return redirect(url_for('account.ViewRequestsAsOwner'))
 
 # View requests for spaces user has requested to book
-@account.route('<int:user_id>/requests')
+@account.route('<int:user_id>/requests', methods = ['GET'])
 def ViewRequestsAsRequester(user_id):
     requests = RequestModel.query.filter_by(requester_id = user_id).all()
     return render_template('user_requests.html', requests=requests)
 
 # View bookings for spaces user has booked
-@account.route('/<int:user_id>/bookings', methods=['GET'])
+@account.route('/<int:user_id>/bookings', methods = ['GET'])
 def ViewBookingsAsRequester(user_id):
     bookings = BookingModel.query.filter_by(user_id=user_id).all()
     return render_template('user_bookings.html', bookings=bookings)
