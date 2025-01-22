@@ -5,89 +5,67 @@ from model import BookingModel
 from model import RequestModel
 from extension import db
 from datetime import date
+from tests.test_model.factories import create_user, create_space, create_request, create_booking
 
 # Fixture to create a test user
+@pytest.fixture(autouse=True)
+def app_context(app):
+    with app.app_context():
+        yield
+
 @pytest.fixture
-def test_user(app, database):
+def setup_test_data(app):
     with app.app_context():
-        user = UserModel(
-            username = "Alister",
-            password = "password123",
-            email = "alister@example.com",
-            phone_number = 123456780
-        )
-    db.session.add(user)
-    db.session.commit()
-    return user
+        owner = create_user("Alister", "alister@example.com", 123456789)
+        requester = create_user("Frank", "frank@example.com", 987654321)
+        space = create_space("Space1", "A space", "Location1", 100, owner.id)
 
-# Fixture to create a test requester
-@pytest.fixture
-def test_requester(app, database):
-    with app.app_context():
-        requester = UserModel(
-            username = "Louis",
-            password = "password123",
-            email = "louis@example.com",
-            phone_number = 123456789
-        )
-    db.session.add(requester)
-    db.session.commit()
-    return requester
+        yield {
+            "owner": owner,
+            "requester": requester,
+            "space": space
+        }
 
-# Fixture to create a test space
-@pytest.fixture
-def test_space(app, database, test_user):
-    with app.app_context():
-        space = SpaceModel(
-            name = "123 Strand",
-            description = "Alister's home",
-            location = "Holborn",
-            price_per_night = 5000.00,
-            owner_id = test_user.id
-        )
-    db.session.add(space)
-    db.session.commit()
-    return space
-
-def test_create_booking(app, database, test_user, test_requester, test_space):
-    with app.app_context():
-        booking = BookingModel(
-            space_id = test_space.id,
-            requester_id= test_requester.id,
-            booking_start_date = date(2025, 1, 25),
-            booking_end_date = date(2025, 1, 30)
-        )
-        db.session.add(booking)
+        db.session.query(BookingModel).delete()
+        db.session.query(RequestModel).delete()
         db.session.commit()
-        
-        saved_booking = BookingModel.query.filter_by(id = booking.id).first()
-        assert saved_booking.id is not None
-        assert saved_booking.space_id == test_space.id
-        assert saved_booking.requester_id == test_requester.id
-        assert saved_booking.booking_start_date == date(2025, 1, 25)
-        assert saved_booking.booking_end_date == date(2025, 1, 30)
-
-def test_multiple_bookings(app, database, test_user, test_space):
+    
+    
+def test_create_booking(app, setup_test_data):
     with app.app_context():
-        booking1 = BookingModel(
-            space_id = test_space.id,
-            requester_id = test_user.id,
-            booking_start_date = date(2025, 1, 25),
-            booking_end_date = date(2025, 1, 30)
+        start_date = date(2025, 1, 25)
+    end_date = date(2025, 1, 30)
+    
+    test_booking = create_booking(
+        setup_test_data["space"].id,
+        setup_test_data["requester"].id,
+        start_date,
+        end_date
+    )
+    
+    assert test_booking.id is not None
+    assert test_booking.space_id == setup_test_data["space"].id
+    assert test_booking.requester_id == setup_test_data["requester"].id
+    assert test_booking.booking_start_date == start_date
+    assert test_booking.booking_end_date == end_date
+
+def test_multiple_bookings(app, setup_test_data):
+    with app.app_context():
+        booking1 = create_booking(
+            setup_test_data["space"].id,
+            setup_test_data["requester"].id,
+            date(2025, 1, 25),
+            date(2025, 1, 30)
         )
-        db.session.add(booking1)
-        db.session.commit()
-        
-        booking2 = BookingModel(
-            space_id = test_space.id,
-            requester_id = test_user.id,
-            booking_start_date = date(2025, 2, 1),
-            booking_end_date = date(2025, 2, 5)
+
+        booking2 = create_booking(
+            setup_test_data["space"].id,
+            setup_test_data["requester"].id,
+            date(2025, 2, 1),
+            date(2025, 2, 5)
         )
-        db.session.add(booking2)
-        db.session.commit()
-        
-        space_bookings = BookingModel.query.filter_by(space_id = test_space.id).all()
-        assert len(space_bookings) == 2
-        assert booking1 in space_bookings # verify the bookings exist
-        assert booking2 in space_bookings
+    
+        assert booking1.id is not None
+        assert booking2.id is not None
+        assert booking1.requester_id == booking2.requester_id
+        assert BookingModel.query.count() == 2, f"Expected 2 bookings, got {BookingModel.query.count()}"
