@@ -32,5 +32,9 @@ Thumbs.db
 *.egg-info/
 dist/
 build/
+
 #Ignore config.py
 config.py
+
+# Ignore migrations dir
+migrations/
