@@ -4,7 +4,7 @@ from model import SpaceModel
 from model import BookingModel
 from model import RequestModel
 from extension import db
-from tests.test_model.factories import create_user, create_space, create_request, create_booking
+from tests.factories import create_user, create_space, create_request, create_booking
 
 def test_create_user(app, database):
     with app.app_context():
