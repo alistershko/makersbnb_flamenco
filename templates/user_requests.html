@@ -2,9 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>View Requests as Requester</title>
 </head>
 <body>
-
+    <h1>All your Requests:</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Request Start Date</th>
+                <th>Request End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if requests %}
+                {% for request in requests %}
+                <tr>
+                    <td>{{ request.id }}</td>    
+                    <td>{{ request.request_start_date }}</td>
+                    <td>{{ request.request_end_date }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3">No requests found.</td>    
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
 </body>
 </html>

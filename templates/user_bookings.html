@@ -2,9 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>View Booking As Requester</title>
 </head>
 <body>
-
+    <h1>All your Bookings:</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Booking Start Date</th>
+                <th>Booking End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if bookings %}
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.id }}</td>    
+                    <td>{{ booking.booking_start_date }}</td>
+                    <td>{{ booking.booking_end_date }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3">No bookings found.</td>    
+                </tr>
+            {% endif %}
+        </tbody>
 </body>
 </html>
