@@ -15,48 +15,70 @@ auth = Blueprint("auth", __name__, url_prefix="/auth")
 
 # Register a new user
 @auth.route('/register', methods=['GET', 'POST'])
-def Register():
+def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        if UserModel.query.filter_by(email = form.email.data).first():
-            flash("Email already exists", "danger")
+        # Check if email exists
+        existing_user = UserModel.query.filter_by(email=form.email.data).first()
+        if existing_user:
+            form.email.errors.append("Email already exists")
             return render_template("register.html", form=form)
 
+        # Check if username exists
+        existing_username = UserModel.query.filter_by(username=form.username.data).first()
+        if existing_username:
+            form.username.errors.append("Username already taken")
+            return render_template("register.html", form=form)
 
+        try:
+            # Create new user
+            user = UserModel(
+                username=form.username.data,
+                email=form.email.data,
+                phone_number=form.phone_number.data,
+                password=form.password.data
+            )
+            db.session.add(user)
+            db.session.commit()
 
-        user = UserModel(
-            username = form.username.data,
-            password = form.password.data,
-            email = form.email.data,
-            phone_number = form.phone_number.data
-        )
-        db.session.add(user)
-        db.session.commit()
-        flash("Account create successfully", "success")
+            flash("Account created successfully! Please login.", "success")
+            return redirect(url_for('auth.login'))  # redirect to login page after successful registration
 
-        return redirect(url_for("auth.login"))
+        except Exception as e:
+            db.session.rollback()
+            flash("An error occurred. Please try again.", "danger")
+            return render_template("register.html", form=form)  # Roll back when an error occurs
+
     return render_template("register.html", form=form)
 
-# Login to an existing account
-@auth.route('/login', methods = ['GET', 'POST'])
-def Login():
+
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = UserModel().query.filter_by(email = form.email.data)
-        if user and user.password() ==  form.password.data:
-            # always store the user_id in the session so it temporaily store this information until logout
+        user = UserModel.query.filter_by(email=form.email.data).first()
+
+        # Check if user exists
+        if not user:
+            form.email.errors.append("Email not found")
+            return render_template("login.html", form=form)
+
+        # Check password
+        if user.password == form.password.data:
             session['user_id'] = user.id
             flash("Account Login Successfully", "success")
-            return redirect(url_for("main.dashboard"))
-
+            return redirect(url_for("homepage.ListAllSpaces"))  # redirect back to home page after successful login
         else:
-            flash("Password Incorrect", "danger")
-    #   redirect to login again
+            form.password.errors.append("Password Incorrect")
+            return render_template("login.html", form=form)
+
     return render_template("login.html", form=form)
+
+
 
 # Logout from a session
 @auth.route('/logout')
-def Logout():
+def logout():
     session.pop('user_id', None)
     flash("Logged out successfully!", "success")
     return redirect(url_for("auth.login"))

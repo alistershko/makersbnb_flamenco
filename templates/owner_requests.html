@@ -2,9 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Requests as Owner</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+        table th {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-approve {
+            background: #27ae60;
+        }
+        .btn-approve:hover {
+            background: #229954;
+        }
+        .btn-reject {
+            background: #e74c3c;
+        }
+        .btn-reject:hover {
+            background: #c0392b;
+        }
+    </style>
 </head>
 <body>
-
+<div class="container">
+    <h1>Pending Requests for Your Spaces</h1>
+    {% if requests %}
+        <table>
+            <thead>
+            <tr>
+                <th>Space</th>
+                <th>Requester</th>
+                <th>Message</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for req in requests %}
+                <tr>
+                    <td>{{ req.space.name }}</td>
+                    <td>{{ req.requester_id }}</td>
+                    <td>{{ req.message }}</td>
+                    <td>{{ req.booking_start_date }}</td>
+                    <td>{{ req.booking_end_date }}</td>
+                    <td class="actions">
+                        <!-- Approve Button -->
+                        <form method="POST" action="{{ url_for('account.HandleRequestAsOwner', request_id=req.id, action='approve') }}" style="display:inline;">
+                            <button class="btn btn-approve" type="submit">Approve</button>
+                        </form>
+                        <!-- Reject Button -->
+                        <form method="POST" action="{{ url_for('account.HandleRequestAsOwner', request_id=req.id, action='reject') }}" style="display:inline;">
+                            <button class="btn btn-reject" type="submit">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No pending requests found.</p>
+    {% endif %}
+</div>
 </body>
 </html>

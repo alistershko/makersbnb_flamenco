@@ -2,9 +2,131 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Spaces</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p.description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #c0392b;
+        }
+        .slider {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card {
+            background: #fff;
+            margin: 15px;
+            width: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .card-description {
+            font-size: 14px;
+            color: #555;
+            margin: 10px 0 20px;
+        }
+        .view-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #e74c3c;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+        .view-btn:hover {
+            background: #c0392b;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <h1>Explore Our Spaces</h1>
+    <p class="description">Browse through our curated list of spaces available for rent. Find the perfect one for your needs!</p>
 
+    <!-- Buttons Section -->
+    <div class="buttons">
+        <a href="{{ url_for('homepage.CreateSpace') }}" class="btn">Make a Space</a>
+        <a href="{{ url_for('account.ViewRequestsAsRequester') }}" class="btn">View Your Requests</a>
+        <a href="{{ url_for('account.ViewBookingsAsRequester') }}" class="btn">View Your Bookings</a>
+        <a href="{{ url_for('account.ViewRequestsAsOwner') }}" class="btn">View Requests as Owner</a> <!-- 新按钮 -->
+    </div>
+
+    <!-- Available Spaces Section -->
+    <div class="slider">
+        {% for space in spaces %}
+            <div class="card">
+                <!-- Image -->
+                <img src="{{ space.image_url or url_for('static', filename='images/space_placeholder.jpg') }}" alt="{{ space.name }}">
+
+                <!-- Card Content -->
+                <div class="card-content">
+                    <h2 class="card-title">{{ space.name }}</h2>
+                    <p class="card-description">{{ space.description[:100] }}{% if space.description|length > 100 %}...{% endif %}</p>
+                    <a href="{{ url_for('homepage.ShowOneSpace', space_id=space.id) }}" class="view-btn">View Details</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 </body>
 </html>

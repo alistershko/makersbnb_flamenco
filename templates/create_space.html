@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request to Book</title>
+    <title>Create Space</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -37,15 +37,11 @@
             font-size: 14px;
             font-weight: 500;
         }
-        .form-container input, .form-container textarea {
+        .form-container input {
             margin-bottom: 15px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-        }
-        .form-container textarea {
-            resize: none;
-            height: 100px;
         }
         .form-container button {
             padding: 10px 15px;
@@ -63,24 +59,21 @@
 </head>
 <body>
 <div class="form-container">
-    <h1>Request to Book</h1>
+    <h1>Create Space</h1>
     <form method="POST">
-        <!-- CSRF token -->
         {{ form.hidden_tag() }}
+        <label for="name">Name</label>
+        {{ form.name }}
 
-        <!-- Booking start date -->
-        <label for="booking_start_date">Booking Start Date</label>
-        {{ form.booking_start_date }}
+        <label for="description">Description</label>
+        {{ form.description }}
 
-        <!-- Booking end date -->
-        <label for="booking_end_date">Booking End Date</label>
-        {{ form.booking_end_date }}
+        <label for="location">Location</label>
+        {{ form.location }}
 
-        <!-- Message -->
-        <label for="message">Message</label>
-        {{ form.message }}
+        <label for="price_per_night">Price per Night</label>
+        {{ form.price_per_night }}
 
-        <!-- Submit button -->
         {{ form.submit(class_="btn") }}
     </form>
 </div>

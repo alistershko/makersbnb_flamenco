@@ -2,9 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ space.name }}</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .space-details {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .space-details img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .space-details h1 {
+            margin: 10px 0;
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+        }
+        .space-details h2 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #888;
+        }
+        .space-details p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+        .space-details .price {
+            font-size: 22px;
+            font-weight: 600;
+            color: #e74c3c;
+            margin: 20px 0;
+        }
+        .btn-container {
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #c0392b;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <div class="space-details">
+        <!-- Space image placeholder -->
+        <img src="{{ url_for('static', filename='images/space_placeholder.jpg') }}" alt="{{ space.name }}">
 
+        <!-- Space name -->
+        <h1>{{ space.name }}</h1>
+
+        <!-- Space location -->
+        <h2>Location: {{ space.location }}</h2>
+
+        <!-- Space description -->
+        <p>{{ space.description }}</p>
+
+        <!-- Space price -->
+        <div class="price">Price per night: ${{ space.price_per_night }}</div>
+
+        <!-- Button to request booking -->
+        <div class="btn-container">
+            <a href="{{ url_for('homepage.RequestToBook', space_id=space.id) }}" class="btn">Request to Book</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

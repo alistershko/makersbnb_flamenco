@@ -2,32 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Booking As Requester</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bookings</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+        table th {
+            background: #e74c3c;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-    <h1>All your Bookings:</h1>
-    <table>
-        <thead>
+<div class="container">
+    <h1>Your Bookings</h1>
+    {% if bookings %}
+        <table>
+            <thead>
             <tr>
-                <th>Booking ID</th>
-                <th>Booking Start Date</th>
-                <th>Booking End Date</th>
+                <th>Space</th>
+                <th>Start Date</th>
+                <th>End Date</th>
             </tr>
-        </thead>
-        <tbody>
-            {% if bookings %}
-                {% for booking in bookings %}
+            </thead>
+            <tbody>
+            {% for booking in bookings %}
                 <tr>
-                    <td>{{ booking.id }}</td>    
+                    <td>{{ booking.space.name }}</td>
                     <td>{{ booking.booking_start_date }}</td>
                     <td>{{ booking.booking_end_date }}</td>
                 </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="3">No bookings found.</td>    
-                </tr>
-            {% endif %}
-        </tbody>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no bookings at the moment.</p>
+    {% endif %}
+</div>
 </body>
 </html>
